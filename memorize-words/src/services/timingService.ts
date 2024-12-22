@@ -1,4 +1,4 @@
-const VerifyTiming = (updatedDate: string, status: string): boolean => {
+export function VerifyTiming  (updatedDate: string, status: string): boolean  {
     const now = new Date();
     const updatedDateObj = new Date(updatedDate);
     const differenceInMs = now.getTime() - updatedDateObj.getTime();
@@ -24,4 +24,23 @@ const VerifyTiming = (updatedDate: string, status: string): boolean => {
             return false;
     }
 };
-export default VerifyTiming;
+export function GetProgressPercentage(status: string): number {
+    switch (status) {
+        case "CREATED":
+            return 0;
+        case "ONE_HOUR":
+            return 10;
+        case "ONE_DAY":
+            return 25;
+        case "TWO_DAYS":
+            return 50;
+        case "FIVE_DAYS":
+            return 75;
+        case "ONE_MONTH":
+            return 90;
+        case "COMPLETED":
+            return 100;
+        default:
+            return 0;
+    }
+}

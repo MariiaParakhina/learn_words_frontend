@@ -1,6 +1,6 @@
 <template>
-  <ion-page>
-    <ion-tabs>
+  <ion-page class="page">
+    <ion-tabs class="page">
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="collections" href="/tabs/collections">
@@ -24,5 +24,15 @@
 
 <script setup lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage, IonRouterOutlet } from '@ionic/vue';
-import {settingsSharp, librarySharp, mapSharp} from 'ionicons/icons';
+import { settingsSharp, librarySharp, mapSharp } from 'ionicons/icons';
 </script>
+
+<style scoped>
+.page{
+  background-color: #1B263B;
+}
+
+ion-tab-button {
+  --color-selected: white;
+}
+</style>

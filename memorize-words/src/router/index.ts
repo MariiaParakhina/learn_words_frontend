@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
+import AddWordsToCollectionView from "@/views/AddWordsToCollectionView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -14,6 +15,15 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/practice/:id',
     component: () => import('@/views/WordsPracticeView.vue')
+  },
+  {
+    path: '/add-collection',
+    component: () => import('@/views/AddCollectionView.vue')
+  },
+  {
+    path: '/add-words/:id',
+    name: 'AddWords',
+    component:()=> import('@/views/AddWordsToCollectionView.vue')
   },
   {
     path: '/tabs/',

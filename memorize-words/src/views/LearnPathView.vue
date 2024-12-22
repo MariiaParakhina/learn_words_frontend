@@ -1,80 +1,86 @@
 <template>
   <ion-page :key="routeKey">
     <ion-content :fullscreen="true" class="page-content">
+      <ion-button class="back-button" @click="goBack">
+        <ion-icon aria-hidden="true" :icon="arrowBack" />
+      </ion-button>
+      <ion-button class="delete-button" @click="deleteCollection">
+        <ion-icon aria-hidden="true" :icon="trashBin" />
+      </ion-button>
       <div class="content">
         <div class="container">
           <div class="journey">
             <img src="../../public/path-to-one-hour.svg" class="path-to-one-hour" />
 
-            <ion-button class="start-button" @click="startNewTest('CREATED')" fill="clear">
+            <ion-button class="start-button" @click="startNewTest('CREATED')" fill="clear" :disabled="!isButtonEnabled('CREATED')" :class="{ 'highlight': isButtonEnabled('CREATED') }">
               <div class="button-content">
                 <img src="../../public/start-button.png" alt="Start" class="start" />
-                <label v-if="!loading && collection && collection.status === 'CREATED'">
+                <label v-if="!loading && collection && isValidToStart('CREATED')">
                   Click to start!
                 </label>
               </div>
             </ion-button>
-            <ion-button class="mountain-button one-hour" @click="startNewTest('ONE_HOUR')" fill="clear">
+            <ion-button class="mountain-button one-hour" @click="startNewTest('ONE_HOUR')" fill="clear" :disabled="!isButtonEnabled('ONE_HOUR')" :class="{ 'highlight': isButtonEnabled('ONE_HOUR') }">
               <div class="button-content">
                 <img src="../../public/achievement.png" alt="Mountain 1" class="mountain" />
-                <p v-if="!loading && collection && collection.status === 'ONE_HOUR' && remainingTime('ONE_HOUR') > 0">
-                  {{ countdowns['ONE_HOUR'] }}
-                </p>
-                <p v-if="!loading && collection && collection.status === 'ONE_HOUR' && remainingTime('ONE_HOUR') <= 0">
+                <p v-if="!loading && collection && isValidToStart('ONE_HOUR')">
                   Click to start
+                </p>
+                <p v-else-if="!loading && collection && collection.status === 'ONE_HOUR' && remainingTime('ONE_HOUR') > 0">
+                  {{ countdowns['ONE_HOUR'] }}
                 </p>
               </div>
             </ion-button>
             <img src="../../public/path-to-one-day.svg" class="path-to-one-day" />
-            <ion-button class="mountain-button one-day" @click="startNewTest('ONE_DAY')" fill="clear">
+            <ion-button class="mountain-button one-day" @click="startNewTest('ONE_DAY')" fill="clear" :disabled="!isButtonEnabled('ONE_DAY')" :class="{ 'highlight': isButtonEnabled('ONE_DAY') }">
               <div class="button-content">
                 <img src="../../public/achievement.png" alt="Mountain 2" class="mountain" />
-                <p v-if="!loading && collection && collection.status === 'ONE_DAY' && remainingTime('ONE_DAY') > 0">
-                  {{ countdowns['ONE_DAY'] }}
-                </p>
-                <p v-if="!loading && collection && collection.status === 'ONE_DAY' && remainingTime('ONE_DAY') <= 0">
+                <p v-if="!loading && collection && isValidToStart('ONE_DAY')">
                   Click to start
+                </p>
+                <p v-else-if="!loading && collection && collection.status === 'ONE_DAY' && remainingTime('ONE_DAY') > 0">
+                  {{ countdowns['ONE_DAY'] }}
                 </p>
               </div>
             </ion-button>
             <img src="../../public/path-to-two-days.svg" class="path-to-two-days" />
-            <ion-button class="mountain-button two-days" @click="startNewTest('TWO_DAYS')" fill="clear">
+            <ion-button class="mountain-button two-days" @click="startNewTest('TWO_DAYS')" fill="clear" :disabled="!isButtonEnabled('TWO_DAYS')" :class="{ 'highlight': isButtonEnabled('TWO_DAYS') }">
               <div class="button-content">
                 <img src="../../public/achievement.png" alt="Mountain 3" class="mountain" />
-                <p v-if="!loading && collection && collection.status === 'TWO_DAYS' && remainingTime('TWO_DAYS') > 0">
-                  {{ countdowns['TWO_DAYS'] }}
-                </p>
-                <p v-if="!loading && collection && collection.status === 'TWO_DAYS' && remainingTime('TWO_DAYS') <= 0">
+                <p v-if="!loading && collection && isValidToStart('TWO_DAYS')">
                   Click to start
+                </p>
+                <p v-else-if="!loading && collection && collection.status === 'TWO_DAYS' && remainingTime('TWO_DAYS') > 0">
+                  {{ countdowns['TWO_DAYS'] }}
                 </p>
               </div>
             </ion-button>
             <img src="../../public/path-to-and-from-five-days.svg" class="path-to-and-from-five-days" />
-            <ion-button class="mountain-button five-days" @click="startNewTest('FIVE_DAYS')" fill="clear">
+            <ion-button class="mountain-button five-days" @click="startNewTest('FIVE_DAYS')" fill="clear" :disabled="!isButtonEnabled('FIVE_DAYS')" :class="{ 'highlight': isButtonEnabled('FIVE_DAYS') }">
               <div class="button-content">
                 <img src="../../public/achievement.png" alt="Mountain 4" class="mountain" />
-                <p v-if="!loading && collection && collection.status === 'FIVE_DAYS' && remainingTime('FIVE_DAYS') > 0">
-                  {{ countdowns['FIVE_DAYS'] }}
-                </p>
-                <p v-if="!loading && collection && collection.status === 'FIVE_DAYS' && remainingTime('FIVE_DAYS') <= 0">
+                <p v-if="!loading && collection && isValidToStart('FIVE_DAYS')">
                   Click to start
+                </p>
+                <p v-else-if="!loading && collection && collection.status === 'FIVE_DAYS' && remainingTime('FIVE_DAYS') > 0">
+                  {{ countdowns['FIVE_DAYS'] }}
                 </p>
               </div>
             </ion-button>
-            <ion-button class="mountain-button month" @click="startNewTest('ONE_MONTH')" fill="clear">
+            <ion-button class="mountain-button month" @click="startNewTest('ONE_MONTH')" fill="clear" :disabled="!isButtonEnabled('ONE_MONTH')" :class="{ 'highlight': isButtonEnabled('ONE_MONTH') }">
               <div class="button-content">
                 <img src="../../public/achievement.png" alt="Mountain 5" class="mountain" />
-                <p v-if="!loading && collection && collection.status === 'ONE_MONTH' && remainingTime('ONE_MONTH') > 0">
-                  {{ countdowns['ONE_MONTH'] }}
-                </p>
-                <p v-if="!loading && collection && collection.status === 'ONE_MONTH' && remainingTime('ONE_MONTH') <= 0">
+                <p v-if="!loading && collection && isValidToStart('ONE_MONTH')">
                   Click to start
+                </p>
+                <p v-else-if="!loading && collection && collection.status === 'ONE_MONTH' && remainingTime('ONE_MONTH') > 0">
+                  {{ countdowns['ONE_MONTH'] }}
                 </p>
               </div>
             </ion-button>
 
             <img src="../../public/path-to-finish.svg" class="path-to-finish" />
-            <ion-button class="finish-button" @click="startNewTest('COMPLETED')" fill="clear">
+            <ion-button class="finish-button" @click="startNewTest('COMPLETED')" fill="clear" :disabled="!isButtonEnabled('COMPLETED')" :class="{ 'highlight': isButtonEnabled('COMPLETED') }">
               <div class="button-content">
                 <img src="../../public/finish.png" alt="Finish Line" class="finish-line" />
                 <p v-if="!loading && collection && collection.status === 'COMPLETED'">Click to start</p>
@@ -90,14 +96,19 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { IonPage, IonContent, IonButton } from '@ionic/vue';
+import { IonPage, IonContent, IonButton, IonIcon } from '@ionic/vue';
 import api from '@/services/api';
-import VerifyTiming from '../services/timingService';
+import { VerifyTiming } from '../services/timingService';
+import { addOutline, arrowBack, trashBin } from "ionicons/icons";
 
 const router = useRouter();
 const route = useRoute();
-const collection = ref<{ id?: string, status?: string, updatedAt?: string } | null>(null);
+const collection = ref<{ id?: string, status?: string, updatedAt?: string, isPracticed: boolean, isPassed:boolean } | null>(null);
 const loading = ref(true);
+
+const isValidToStart = (status: string) => {
+  return collection.value?.status === status && (remainingTime(status) <= 0 || (collection.value?.isPracticed && collection.value.isPassed));
+};
 
 const startNewTest = (status: string) => {
   if (!collection.value || !collection.value.id) {
@@ -116,10 +127,29 @@ const fetchCollection = async (id: string) => {
     const response = await api.getCollection(id);
     collection.value = response.result;
     console.log('Collection fetched:', collection.value);
+    if (!collection.value) {
+      router.push('/tabs/');
+    } else if (collection.value.status === 'NO_WORDS') {
+      router.push(`/add-words/${collection.value.id}`);
+    }
   } catch (error) {
     console.error('Error fetching collection:', error);
+    router.push('/tabs/');
   } finally {
     loading.value = false;
+  }
+};
+
+const deleteCollection = async () => {
+  if (!collection.value || !collection.value.id) {
+    console.error('Collection data is not available');
+    return;
+  }
+  try {
+    await api.deleteCollection(collection.value.id);
+    await router.push('/tabs/collections');
+  } catch (error) {
+    console.error('Error deleting collection:', error);
   }
 };
 
@@ -168,12 +198,19 @@ const updateCountdowns = () => {
     countdowns.value[status] = remainingTimeText(status);
   });
 };
+
+const isButtonEnabled = (status: string) => {
+  return !loading.value && collection.value && collection.value.status === status && remainingTime(status) != null;
+};
+
 const loadData = async () => {
   const id = route.params.id as string;
-  console.log('loaded');
-  await fetchCollection(id);
-  updateCountdowns();
-  setInterval(updateCountdowns, 1000);
+  if(id){
+    await fetchCollection(id);
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
+  }
+
 };
 
 onMounted(loadData);
@@ -181,8 +218,31 @@ onMounted(loadData);
 watch(() => route.params.id, loadData);
 
 const routeKey = computed(() => route.params.id);
+
+const goBack = () => {
+  router.push('/tabs/collections');
+};
 </script>
+
 <style scoped>
+.back-button {
+  --background: #1B263B;
+  --color: white;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.delete-button {
+  --background: #1B263B;
+  --color: white;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
 .container {
   position: relative;
   width: 100%;

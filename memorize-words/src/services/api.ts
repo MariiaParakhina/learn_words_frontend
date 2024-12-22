@@ -17,8 +17,24 @@ export default {
         return response;
     },
     async getCollection(id:string) {
-        const response = await apiClient.get(`/collections/${id}`);
+
+        if(id) {
+            const response = await apiClient.get(`/collections/${id}`);
+
+            return response.data;
+        }
+    },
+    async deleteCollection(id:string) {
+        const response = await apiClient.delete(`/collections/${id}`);
         return response.data;
+    },
+    async addCollection(collectionData:any) {
+        const response = await apiClient.post('/collections', collectionData);
+        return response;
+    },
+    async addWords(collectionId:string, words:any) {
+        const response = await apiClient.post(`/words?collection=${collectionId}`, words);
+        return response;
     },
     async startTest(id:string){
         const response = await apiClient.post('/startPractice?collection='+id);

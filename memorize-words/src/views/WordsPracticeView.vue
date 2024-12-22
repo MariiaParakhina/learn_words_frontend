@@ -10,9 +10,13 @@
             <p class="word">{{ words[currentWordIndex].origin }}</p>
             <input v-model="userInput" @keyup.enter="checkTranslation" placeholder="Enter translation" />
             <p v-if="feedback" :class="feedbackClass">{{ feedback }}</p>
+            <p class="progress-text">Progress: {{ currentWordIndex + 1 }} / {{ words.length }}</p>
+            <div class="progress-bar">
+              <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
+            </div>
           </div>
           <div v-else class="result-container">
-            <p>Practice completed!</p>
+            <p>{{ resultMessage }}</p>
             <p>Mistakes: {{ mistakes }}</p>
             <ion-button @click="finishPractice">Finish Practice</ion-button>
           </div>
@@ -23,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { IonPage, IonContent, IonButton } from '@ionic/vue';
 import api from '@/services/api';
@@ -44,6 +48,12 @@ const feedbackClass = ref('');
 const mistakes = ref(0);
 const loading = ref(true);
 const collection = ref<{ id: string } | null>(null);
+const resultMessage = ref('');
+
+const progressPercentage = computed(() => {
+  return ((currentWordIndex.value + 1) / words.value.length) * 100;
+});
+
 const startPractice = async (collectionId: string) => {
   try {
     const response = await api.startTest(collectionId);
@@ -83,7 +93,8 @@ const checkTranslation = () => {
 
 const finishPractice = async () => {
   try {
-    const isPassed = mistakes.value ===0;
+    const isPassed = mistakes.value === 0;
+    resultMessage.value = isPassed ? 'Congratulations! You passed the practice session!' : 'Practice session failed. Try again!';
     console.log('Finishing practice with result:', isPassed);
     await api.finishPractice(route.params.id as string, isPassed);
     console.log('Practice finished successfully');
@@ -136,6 +147,25 @@ input {
   animation: incorrectAnimation 1s;
 }
 
+.progress-text {
+  margin-top: 20px;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #333;
+  height: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.progress {
+  height: 100%;
+  background-color: #4caf50;
+  border-radius: 5px;
+  transition: width 0.5s;
+}
+
 @keyframes correctAnimation {
   0% { transform: scale(1); }
   50% { transform: scale(1.2); }
@@ -150,6 +180,3 @@ input {
   100% { transform: translateX(0); }
 }
 </style>
-
-
-This should resolve the issues with missing imports and undefined styles.
