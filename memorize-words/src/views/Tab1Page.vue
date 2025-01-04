@@ -15,6 +15,10 @@
         <ion-card v-for="collection in collections" :key="collection.id" @click="handleClick(collection.id)">
           <ion-card-header class="card-header">
             <ion-card-title>{{ collection.name }}</ion-card-title>
+
+          </ion-card-header>
+          <ion-card-content>
+            <p>{{ collection.description }}</p>
             <div class="circular-progress">
               <svg viewBox="0 0 36 36" class="circular-chart">
                 <path class="circle-bg"
@@ -28,10 +32,15 @@
                          a 15.9155 15.9155 0 0 1 0 -31.831"/>
                 <text x="18" y="20.35" class="percentage">{{ GetProgressPercentage(collection.status) }}%</text>
               </svg>
+              <div class="status-text">
+                <p v-if="remainingTime(collection.updatedAt, collection.status) > 0">
+                  {{ remainingTimeText(collection.updatedAt, collection.status) }}
+                </p>
+                <p v-else>
+                  Ready to start!
+                </p>
+              </div>
             </div>
-          </ion-card-header>
-          <ion-card-content>
-            <p>{{ collection.description }}</p>
           </ion-card-content>
         </ion-card>
       </div>
@@ -59,7 +68,10 @@ const collections = ref([]);
 const fetchCollections = async () => {
   try {
     const response = await api.getCollections();
-    collections.value = response.data;
+    collections.value = response.data.map(collection => ({
+      ...collection,
+      remainingTimeText: remainingTimeText(collection.updatedAt, collection.status)
+    }));
   } catch (error) {
     console.error('Error fetching collections:', error);
   }
@@ -67,6 +79,7 @@ const fetchCollections = async () => {
 
 onMounted(() => {
   fetchCollections();
+  setInterval(updateCountdowns, 1000);
 });
 
 watch(() => route.params.reload, (newVal) => {
@@ -82,8 +95,49 @@ const handleClick = (id: string) => {
 const addCollection = () => {
   router.push('/add-collection');
 };
-</script>
 
+const remainingTime = (updatedAt: string, status: string) => {
+  const now = new Date();
+  const lastUpdated = new Date(updatedAt);
+  const differenceInMs = now.getTime() - lastUpdated.getTime();
+  let requiredTimeInSeconds = 0;
+
+  switch (status) {
+    case 'ONE_HOUR':
+      requiredTimeInSeconds = 3600;
+      break;
+    case 'ONE_DAY':
+      requiredTimeInSeconds = 86400;
+      break;
+    case 'TWO_DAYS':
+      requiredTimeInSeconds = 172800;
+      break;
+    case 'FIVE_DAYS':
+      requiredTimeInSeconds = 432000;
+      break;
+    case 'ONE_MONTH':
+      requiredTimeInSeconds = 2592000;
+      break;
+  }
+
+  return Math.max(requiredTimeInSeconds - Math.floor(differenceInMs / 1000), 0);
+};
+
+const remainingTimeText = (updatedAt: string, status: string) => {
+  const time = remainingTime(updatedAt, status);
+  const hours = String(Math.floor(time / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((time % 3600) / 60)).padStart(2, '0');
+  const seconds = String(time % 60).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+const updateCountdowns = () => {
+  collections.value = collections.value.map(collection => ({
+    ...collection,
+    remainingTimeText: remainingTimeText(collection.updatedAt, collection.status)
+  }));
+};
+</script>
 <style scoped>
 .collections-grid {
   display: grid;
@@ -92,7 +146,7 @@ const addCollection = () => {
   padding: 16px;
   background-color: #1B263B; /* Main color */
 }
-ion-header, ion-content, ion-toolbar, ion-title, ion-header,.collections-grid{
+ion-header, ion-content, ion-toolbar, ion-title, ion-header, .collections-grid {
   background-color: transparent; /* Main color */
 }
 
@@ -102,21 +156,27 @@ ion-card {
 }
 
 ion-card-header {
-  background-color: transparent; /* Transparent card header */
+  background-color: transparent;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
+  padding: 8px 16px;
 }
-
+ion-card-content {
+ display: flex;
+flex-direction:row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
 .card-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-top: 10px;
 }
 
 ion-card-title {
   color: white; /* Card title text color */
+  margin: 0; /* Remove margin to reduce space */
 }
 
 ion-card-content p {
@@ -130,6 +190,7 @@ ion-fab-button {
 
 .circular-progress {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -157,5 +218,11 @@ ion-fab-button {
   fill: white;
   font-size: 0.5em;
   text-anchor: middle;
+}
+
+.status-text {
+  margin-top: 8px;
+  text-align: center;
+  color: white;
 }
 </style>
