@@ -35,6 +35,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'collections',
+        name: 'CollectionsPage',
         component: () => import('@/views/Tab1Page.vue')
       },
       {

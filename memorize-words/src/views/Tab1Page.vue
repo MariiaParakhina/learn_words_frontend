@@ -13,12 +13,25 @@
       </ion-header>
       <div class="collections-grid">
         <ion-card v-for="collection in collections" :key="collection.id" @click="handleClick(collection.id)">
-          <ion-card-header>
+          <ion-card-header class="card-header">
             <ion-card-title>{{ collection.name }}</ion-card-title>
+            <div class="circular-progress">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg"
+                      d="M18 2.0845
+                         a 15.9155 15.9155 0 0 1 0 31.831
+                         a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <path class="circle"
+                      :stroke-dasharray="GetProgressPercentage(collection.status) + ', 100'"
+                      d="M18 2.0845
+                         a 15.9155 15.9155 0 0 1 0 31.831
+                         a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                <text x="18" y="20.35" class="percentage">{{ GetProgressPercentage(collection.status) }}%</text>
+              </svg>
+            </div>
           </ion-card-header>
           <ion-card-content>
             <p>{{ collection.description }}</p>
-            <ion-progress-bar :value="GetProgressPercentage(collection.status) / 100"></ion-progress-bar>
           </ion-card-content>
         </ion-card>
       </div>
@@ -32,14 +45,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonProgressBar, IonFab, IonFabButton, IonIcon } from '@ionic/vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonFab, IonFabButton, IonIcon } from '@ionic/vue';
 import api from '@/services/api';
-import { addOutline} from 'ionicons/icons';
+import { addOutline } from 'ionicons/icons';
 import { GetProgressPercentage } from '../services/timingService';
 
 const router = useRouter();
+const route = useRoute();
 const collections = ref([]);
 
 const fetchCollections = async () => {
@@ -53,6 +67,12 @@ const fetchCollections = async () => {
 
 onMounted(() => {
   fetchCollections();
+});
+
+watch(() => route.params.reload, (newVal) => {
+  if (newVal === 'true') {
+    fetchCollections();
+  }
 });
 
 const handleClick = (id: string) => {
@@ -74,7 +94,6 @@ const addCollection = () => {
 }
 ion-header, ion-content, ion-toolbar, ion-title, ion-header,.collections-grid{
   background-color: transparent; /* Main color */
-
 }
 
 ion-card {
@@ -84,6 +103,16 @@ ion-card {
 
 ion-card-header {
   background-color: transparent; /* Transparent card header */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 ion-card-title {
@@ -97,5 +126,36 @@ ion-card-content p {
 ion-fab-button {
   --background: #1B263B; /* FAB button background color */
   --color: white; /* FAB button icon color */
+}
+
+.circular-progress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circular-chart {
+  width: 64px;
+  height: 64px;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #e0e0e0;
+  stroke-width: 2.8; /* Thinner background circle */
+}
+
+.circle {
+  fill: none;
+  stroke: #1B263B;
+  stroke-width: 2; /* Thinner progress circle */
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.6s ease 0s;
+}
+
+.percentage {
+  fill: white;
+  font-size: 0.5em;
+  text-anchor: middle;
 }
 </style>

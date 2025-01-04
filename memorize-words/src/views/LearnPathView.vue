@@ -147,7 +147,9 @@ const deleteCollection = async () => {
   }
   try {
     await api.deleteCollection(collection.value.id);
-    await router.push('/tabs/collections');
+    await router.push({ name: 'CollectionsPage', params: { reload: 'true' } });
+    window.location.reload();
+
   } catch (error) {
     console.error('Error deleting collection:', error);
   }

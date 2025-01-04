@@ -40,6 +40,7 @@ const submitCollection = async () => {
   try {
     const response = await api.addCollection(collection.value);
     router.push(`/add-words/${response.data.id}`);
+
   } catch (error) {
     console.error('Error adding collection:', error);
   }
