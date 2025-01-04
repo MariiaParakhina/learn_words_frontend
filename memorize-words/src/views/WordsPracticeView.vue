@@ -6,21 +6,19 @@
           <p>Loading...</p>
         </div>
         <div v-else>
-          <div v-if="currentWordIndex < words.length" class="word-container">
+          <div v-if="!isPracticeFinished" class="word-container">
             <p class="word">{{ words[currentWordIndex].origin }}</p>
             <input v-model="userInput" @keyup.enter="checkTranslation" placeholder="Enter translation" />
-            <p v-if="feedback" :class="feedbackClass">{{ feedback }}</p>
-            <p class="progress-text">Progress: {{ currentWordIndex + 1 }} / {{ words.length }}</p>
-            <div class="progress-bar">
-              <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
-            </div>
+            <p v-if="feedback" :class="['feedback', feedbackClass]">{{ feedback }}</p>
           </div>
           <div v-else class="result-container">
-            <p>{{ resultMessage }}</p>
-            <p>Mistakes: {{ mistakes }}</p>
+            <p :class="resultClass">{{ resultMessage }}</p>
             <ion-button @click="finishPractice">Finish Practice</ion-button>
           </div>
         </div>
+      </div>
+      <div class="progress-bar-fixed">
+        <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
       </div>
     </ion-content>
   </ion-page>
@@ -48,10 +46,21 @@ const feedbackClass = ref('');
 const mistakes = ref(0);
 const loading = ref(true);
 const collection = ref<{ id: string } | null>(null);
-const resultMessage = ref('');
 
 const progressPercentage = computed(() => {
   return ((currentWordIndex.value + 1) / words.value.length) * 100;
+});
+
+const isPracticeFinished = computed(() => currentWordIndex.value >= words.value.length);
+
+const isPassed = computed(() => mistakes.value === 0);
+
+const resultMessage = computed(() => {
+  return isPassed.value ? 'Congratulations! You passed the practice session!' : 'Sorry, you have failed. Try doing this again.';
+});
+
+const resultClass = computed(() => {
+  return isPassed.value ? 'success' : 'failure';
 });
 
 const startPractice = async (collectionId: string) => {
@@ -93,10 +102,8 @@ const checkTranslation = () => {
 
 const finishPractice = async () => {
   try {
-    const isPassed = mistakes.value === 0;
-    resultMessage.value = isPassed ? 'Congratulations! You passed the practice session!' : 'Practice session failed. Try again!';
-    console.log('Finishing practice with result:', isPassed);
-    await api.finishPractice(route.params.id as string, isPassed);
+    console.log('Finishing practice with result:', isPassed.value);
+    await api.finishPractice(route.params.id as string, isPassed.value);
     console.log('Practice finished successfully');
   } catch (error) {
     console.error('Error finishing practice:', error);
@@ -116,8 +123,8 @@ const finishPractice = async () => {
   width: 100%;
   background-color: #0E0D1B;
   color: white;
-  font-color: white;
   padding: 20px;
+  position: relative;
 }
 
 .loading-container {
@@ -137,46 +144,53 @@ input {
   max-width: 300px;
 }
 
+.feedback {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2em;
+  animation: dropAnimation 1s forwards;
+}
+
 .correct {
   color: green;
-  animation: correctAnimation 1s;
 }
 
 .incorrect {
   color: red;
-  animation: incorrectAnimation 1s;
 }
 
-.progress-text {
-  margin-top: 20px;
-}
-
-.progress-bar {
+.progress-bar-fixed {
+  position: fixed;
+  bottom: 0;
   width: 100%;
   background-color: #333;
   height: 10px;
   border-radius: 5px;
-  margin-top: 10px;
 }
 
 .progress {
   height: 100%;
-  background-color: #4caf50;
+  background-color: rgba(27, 38, 59, 0.8);
   border-radius: 5px;
   transition: width 0.5s;
 }
 
-@keyframes correctAnimation {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
+.success {
+  color: green;
+  font-size: 1.5em;
+  margin-top: 20px;
 }
 
-@keyframes incorrectAnimation {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  50% { transform: translateX(10px); }
-  75% { transform: translateX(-10px); }
-  100% { transform: translateX(0); }
+.failure {
+  color: red;
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+@keyframes dropAnimation {
+  0% { top: -50px; opacity: 0; }
+  100% { top: 50px; opacity: 1; }
 }
 </style>
