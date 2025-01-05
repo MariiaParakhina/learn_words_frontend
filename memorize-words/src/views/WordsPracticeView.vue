@@ -9,12 +9,12 @@
           <div v-if="!isPracticeFinished" class="word-container">
             <ion-item>
               <ion-label position="stacked">
-                <h3>{{ words[currentWordIndex].origin }}</h3>
+                <h3>{{ words[currentWordIndex].translation }}</h3>
               </ion-label>
-              <ion-textarea v-model="userInput" @keyup.enter="handleButtonClick" placeholder="Enter translation"></ion-textarea>
+              <ion-textarea v-model="userInput" @keyup.enter="handleButtonClick" placeholder="Enter original word"></ion-textarea>
             </ion-item>
             <p v-if="feedback" :class="['feedback', feedbackClass]">{{ feedback }}</p>
-            <p v-if="showCorrectAnswer" class="correct-answer">Correct answer: {{ words[currentWordIndex].translation }}</p>
+            <p v-if="showCorrectAnswer" class="correct-answer">Correct answer: {{ words[currentWordIndex].origin }}</p>
             <ion-button :disabled="!userInput" @click="handleButtonClick" class="form-button">{{ buttonText }}</ion-button>
           </div>
           <div v-else class="result-container">
@@ -25,7 +25,7 @@
       </div>
       <div class="progress-bar-fixed">
         <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
-        <p v-if="showCorrectAnswer" class="correct-answer">Correct answer: {{ words[currentWordIndex].translation }}</p>
+        <p v-if="showCorrectAnswer" class="correct-answer">Correct answer: {{ words[currentWordIndex].origin }}</p>
       </div>
     </ion-content>
   </ion-page>
@@ -99,9 +99,9 @@ onMounted(() => {
 
 const checkTranslation = () => {
   const originalText = words.value[currentWordIndex.value].origin;
-  console.log(`Original text: ${originalText}`);
 
-  if (userInput.value.toLowerCase() === words.value[currentWordIndex.value].translation.toLowerCase()) {
+
+  if (userInput.value.trim().toLowerCase() === originalText.toLowerCase()) {
     feedback.value = 'Correct!';
     feedbackClass.value = 'correct';
   } else {
@@ -179,14 +179,11 @@ h3 {
   color: white;
   text-align: center;
   font-size: 2em;
-
 }
 
 ion-textarea {
   width: 100%;
-
 }
-
 
 .feedback {
   position: absolute;
