@@ -4,9 +4,15 @@
       <ion-button class="back-button" @click="goBack">
         <ion-icon aria-hidden="true" :icon="arrowBack" />
       </ion-button>
-      <ion-button class="delete-button" @click="deleteCollection">
-        <ion-icon aria-hidden="true" :icon="trashBin" />
-      </ion-button>
+      <div class="setBtn">
+        <ion-button class="delete-button" @click="deleteCollection">
+          <ion-icon aria-hidden="true" :icon="trashBin" />
+        </ion-button>
+        <ion-button class="delete-button" @click="seeWords">
+          <ion-icon aria-hidden="true" :icon="bookOutline" />
+        </ion-button>
+      </div>
+
       <div class="content">
         <div class="container">
           <div class="journey">
@@ -99,7 +105,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { IonPage, IonContent, IonButton, IonIcon } from '@ionic/vue';
 import api from '@/services/api';
 import { VerifyTiming } from '../services/timingService';
-import { addOutline, arrowBack, trashBin } from "ionicons/icons";
+import {addOutline, arrowBack, bookOutline, trashBin} from "ionicons/icons";
 
 const router = useRouter();
 const route = useRoute();
@@ -154,7 +160,13 @@ const deleteCollection = async () => {
     console.error('Error deleting collection:', error);
   }
 };
-
+const seeWords = async () => {
+  if (collection.value && collection.value.id) {
+    router.push(`/words/${collection.value.id}`);
+  } else {
+    console.error('Collection data is not available');
+  }
+};
 const remainingTime = (status: string) => {
   if (!collection.value || !collection.value.updatedAt) return 0;
   const now = new Date();
@@ -235,14 +247,16 @@ const goBack = () => {
   left: 10px;
   z-index: 1000;
 }
-
-.delete-button {
-  --background: #1B263B;
-  --color: white;
+.setBtn{
   position: absolute;
   top: 10px;
   right: 10px;
+  width: 30%;
   z-index: 1000;
+}
+.delete-button {
+  --background: #1B263B;
+  --color: white;
 }
 
 .container {

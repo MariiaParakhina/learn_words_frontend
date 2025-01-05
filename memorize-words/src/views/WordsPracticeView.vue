@@ -7,18 +7,25 @@
         </div>
         <div v-else>
           <div v-if="!isPracticeFinished" class="word-container">
-            <p class="word">{{ words[currentWordIndex].origin }}</p>
-            <input v-model="userInput" @keyup.enter="checkTranslation" placeholder="Enter translation" />
+            <ion-item>
+              <ion-label position="stacked">
+                <h3>{{ words[currentWordIndex].origin }}</h3>
+              </ion-label>
+              <ion-textarea v-model="userInput" @keyup.enter="handleButtonClick" placeholder="Enter translation"></ion-textarea>
+            </ion-item>
             <p v-if="feedback" :class="['feedback', feedbackClass]">{{ feedback }}</p>
+            <p v-if="showCorrectAnswer" class="correct-answer">Correct answer: {{ words[currentWordIndex].translation }}</p>
+            <ion-button :disabled="!userInput" @click="handleButtonClick" class="form-button">{{ buttonText }}</ion-button>
           </div>
           <div v-else class="result-container">
             <p :class="resultClass">{{ resultMessage }}</p>
-            <ion-button @click="finishPractice">Finish Practice</ion-button>
+            <ion-button @click="finishPractice" class="form-button">Finish Practice</ion-button>
           </div>
         </div>
       </div>
       <div class="progress-bar-fixed">
         <div class="progress" :style="{ width: progressPercentage + '%' }"></div>
+        <p v-if="showCorrectAnswer" class="correct-answer">Correct answer: {{ words[currentWordIndex].translation }}</p>
       </div>
     </ion-content>
   </ion-page>
@@ -27,7 +34,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { IonPage, IonContent, IonButton } from '@ionic/vue';
+import { IonPage, IonContent, IonButton, IonTextarea, IonItem, IonTitle } from '@ionic/vue';
 import api from '@/services/api';
 
 interface Word {
@@ -46,6 +53,8 @@ const feedbackClass = ref('');
 const mistakes = ref(0);
 const loading = ref(true);
 const collection = ref<{ id: string } | null>(null);
+const showCorrectAnswer = ref(false);
+const isAnswerChecked = ref(false);
 
 const progressPercentage = computed(() => {
   return ((currentWordIndex.value + 1) / words.value.length) * 100;
@@ -61,6 +70,10 @@ const resultMessage = computed(() => {
 
 const resultClass = computed(() => {
   return isPassed.value ? 'success' : 'failure';
+});
+
+const buttonText = computed(() => {
+  return isAnswerChecked.value ? 'Next' : 'Check';
 });
 
 const startPractice = async (collectionId: string) => {
@@ -85,6 +98,9 @@ onMounted(() => {
 });
 
 const checkTranslation = () => {
+  const originalText = words.value[currentWordIndex.value].origin;
+  console.log(`Original text: ${originalText}`);
+
   if (userInput.value.toLowerCase() === words.value[currentWordIndex.value].translation.toLowerCase()) {
     feedback.value = 'Correct!';
     feedbackClass.value = 'correct';
@@ -92,24 +108,36 @@ const checkTranslation = () => {
     feedback.value = 'Incorrect!';
     feedbackClass.value = 'incorrect';
     mistakes.value++;
+    showCorrectAnswer.value = true;
   }
-  setTimeout(() => {
-    feedback.value = '';
-    userInput.value = '';
-    currentWordIndex.value++;
-  }, 1000);
+  isAnswerChecked.value = true;
+};
+
+const nextWord = () => {
+  feedback.value = '';
+  userInput.value = '';
+  showCorrectAnswer.value = false;
+  isAnswerChecked.value = false;
+  currentWordIndex.value++;
+};
+
+const handleButtonClick = () => {
+  if (isAnswerChecked.value) {
+    nextWord();
+  } else {
+    checkTranslation();
+  }
 };
 
 const finishPractice = async () => {
   try {
     console.log('Finishing practice with result:', isPassed.value);
-    await api.finishPractice(route.params.id as string, isPassed.value);
+    if (isPracticeFinished.value) await api.finishPractice(route.params.id as string, isPassed.value);
     console.log('Practice finished successfully');
   } catch (error) {
     console.error('Error finishing practice:', error);
   }
   window.location.href = `/learn/${collection.value?.id}`;
-  //router.push(`/learn/${collection.value?.id}`);
 };
 </script>
 
@@ -134,15 +162,31 @@ const finishPractice = async () => {
 .word-container, .result-container {
   text-align: center;
   width: 100%;
+  background-color: transparent;
 }
 
-input {
-  margin-top: 20px;
-  padding: 10px;
-  font-size: 16px;
-  width: 100%;
-  max-width: 300px;
+ion-item {
+  --highlight-background: transparent;
+  --background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
+
+h3 {
+  margin-bottom: 10px;
+  display: block;
+  color: white;
+  text-align: center;
+  font-size: 2em;
+
+}
+
+ion-textarea {
+  width: 100%;
+
+}
+
 
 .feedback {
   position: absolute;
@@ -159,6 +203,15 @@ input {
 
 .incorrect {
   color: red;
+}
+
+.correct-answer {
+  color: white;
+  margin-top: 10px;
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .progress-bar-fixed {
@@ -187,6 +240,14 @@ input {
   color: red;
   font-size: 1.5em;
   margin-top: 20px;
+}
+
+.form-button {
+  --background: #1B263B;
+  --color: white;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 300px;
 }
 
 @keyframes dropAnimation {

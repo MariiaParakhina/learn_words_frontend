@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {resolveEnvPrefix} from "vite";
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:3000/api',
@@ -11,6 +10,12 @@ const apiClient = axios.create({
 });
 
 export default {
+    async getWords(collectionId: string) {
+        if (collectionId) {
+            const response = await apiClient.get(`/words?collection=${collectionId}`);
+            return response.data;
+        }
+    },
     getCollections() {
         const response = apiClient.get('/collections');
 

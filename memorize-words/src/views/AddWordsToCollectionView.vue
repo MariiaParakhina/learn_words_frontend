@@ -1,10 +1,10 @@
 <template>
   <ion-page>
-    <ion-header class="custom-header">
+<!--    <ion-header class="custom-header">
       <ion-toolbar>
         <ion-title>Add Words</ion-title>
       </ion-toolbar>
-    </ion-header>
+    </ion-header>-->
     <ion-content :fullscreen="true" class="page-content" ref="content">
       <div v-if="collectionExists && collectionStatus === 'NO_WORDS'" class="form-container">
         <div v-for="(word, index) in collection.words" :key="index" class="word-item">
