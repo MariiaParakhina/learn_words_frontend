@@ -77,8 +77,8 @@ const fetchCollections = async () => {
   }
 };
 
-onMounted(() => {
-  fetchCollections();
+onMounted(async () => {
+  await fetchCollections();
   setInterval(updateCountdowns, 1000);
 });
 
