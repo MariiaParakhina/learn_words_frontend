@@ -46,7 +46,7 @@
       </div>
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button @click="addCollection">
-          <ion-icon aria-hidden="true" :icon="addOutline" />
+          <ion-icon aria-hidden="true" :icon="addOutline"/>
         </ion-fab-button>
       </ion-fab>
     </ion-content>
@@ -54,12 +54,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonFab, IonFabButton, IonIcon } from '@ionic/vue';
+import {ref, onMounted, watch} from 'vue';
+import {useRouter, useRoute} from 'vue-router';
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonFab,
+  IonFabButton,
+  IonIcon
+} from '@ionic/vue';
 import api from '@/services/api';
-import { addOutline } from 'ionicons/icons';
-import { GetProgressPercentage } from '../services/timingService';
+import {addOutline} from 'ionicons/icons';
+import {GetProgressPercentage} from '../services/timingService';
 
 const router = useRouter();
 const route = useRoute();
@@ -82,18 +95,18 @@ onMounted(async () => {
   setInterval(updateCountdowns, 1000);
 });
 
-watch(() => route.params.reload, (newVal) => {
+watch(() => route.params.reload, async (newVal) => {
   if (newVal === 'true') {
-    fetchCollections();
+    await fetchCollections();
   }
 });
 
-const handleClick = (id: string) => {
-  router.push(`/learn/${id}`);
+const handleClick = async (id: string) => {
+  await router.push(`/learn/${id}`);
 };
 
-const addCollection = () => {
-  router.push('/add-collection');
+const addCollection = async () => {
+  await router.push('/add-collection');
 };
 
 const remainingTime = (updatedAt: string, status: string) => {
@@ -146,6 +159,7 @@ const updateCountdowns = () => {
   padding: 16px;
   background-color: #1B263B; /* Main color */
 }
+
 ion-header, ion-content, ion-toolbar, ion-title, ion-header, .collections-grid {
   background-color: transparent; /* Main color */
 }
@@ -162,13 +176,15 @@ ion-card-header {
   justify-content: space-between;
   padding: 8px 16px;
 }
+
 ion-card-content {
- display: flex;
-flex-direction:row;
+  display: flex;
+  flex-direction: row;
   width: 100%;
   justify-content: space-between;
   align-items: center;
 }
+
 .card-header {
   display: flex;
   margin-top: 10px;
