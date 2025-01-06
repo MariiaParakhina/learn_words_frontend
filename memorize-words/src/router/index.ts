@@ -5,6 +5,10 @@ import Tab1Page from "@/views/Tab1Page.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
+    path: '/',
+    component: Tab1Page
+  },
+  {
     path: '/words/:id',
     component: () => import('@/views/LookupWordsView.vue')
   },
@@ -29,11 +33,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/tabs/',
     component: TabsPage,
     children: [
-      {
+   /*   {
         path: 'collections',
         name: 'CollectionsPage',
         component: Tab1Page
-      },
+      },*/
       {
         path: 'resources',
         component: () => import('@/views/Tab2Page.vue')

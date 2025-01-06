@@ -3,7 +3,7 @@
     <ion-tabs class="page">
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
-        <ion-tab-button tab="collections" href="/tabs/collections">
+        <ion-tab-button tab="collections" href="/">
           <ion-icon aria-hidden="true" :icon="mapSharp" />
           <ion-label>Collections</ion-label>
         </ion-tab-button>

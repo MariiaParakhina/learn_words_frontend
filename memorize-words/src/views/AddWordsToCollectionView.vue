@@ -59,11 +59,11 @@ onMounted(async () => {
       collectionStatus.value = response.status;
     } else {
       alert('Collection does not exist or is not in NO_WORDS status.');
-      await router.push('/tabs/collections');
+      await router.push('/');
     }
   } catch (error) {
     console.error('Error fetching collection:', error);
-    await router.push('/tabs/collections');
+    await router.push('/');
   }
 });
 
@@ -93,7 +93,7 @@ const submitWords = async () => {
     console.log(toRaw(collection.value.words)); // Log the raw array
     await api.addWords(collection.value.id, { words: collection.value.words });
     /*await router.push({ name: 'CollectionsPage' });*/
-    await router.push('/tabs/collections');
+    await router.push('/');
   } catch (error) {
     console.error('Error updating collection:', error);
   }

@@ -170,7 +170,7 @@ const deleteCollection = async () => {
   try {
     await api.deleteCollection(collection.value.id);
     // await router.push({name: 'CollectionsPage'});
-    await router.push('/tabs/collections');
+    await router.push('/');
   } catch (error) {
     console.error('Error deleting collection:', error);
   }
@@ -249,7 +249,7 @@ watch(() => route.params.id, loadData);
 const routeKey = computed(() => route.params.id);
 
 const goBack = () => {
-  router.push('/tabs/collections');
+  router.push('/');
 };
 </script>
 
