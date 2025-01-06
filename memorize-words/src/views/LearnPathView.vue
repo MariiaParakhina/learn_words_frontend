@@ -105,7 +105,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { IonPage, IonContent, IonButton, IonIcon } from '@ionic/vue';
 import api from '@/services/api';
 import { VerifyTiming } from '../services/timingService';
-import {addOutline, arrowBack, bookOutline, trashBin} from "ionicons/icons";
+import {arrowBack, bookOutline, trashBin} from "ionicons/icons";
 
 const router = useRouter();
 const route = useRoute();
@@ -134,13 +134,13 @@ const fetchCollection = async (id: string) => {
     collection.value = response.result;
     console.log('Collection fetched:', collection.value);
     if (!collection.value) {
-      router.push('/tabs/');
+      await router.push('/tabs/');
     } else if (collection.value.status === 'NO_WORDS') {
-      router.push(`/add-words/${collection.value.id}`);
+      await router.push(`/add-words/${collection.value.id}`);
     }
   } catch (error) {
     console.error('Error fetching collection:', error);
-    router.push('/tabs/');
+    await router.push('/tabs/');
   } finally {
     loading.value = false;
   }

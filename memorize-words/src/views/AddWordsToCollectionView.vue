@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { toRaw, ref, onMounted, nextTick } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonInput, IonButton, IonIcon } from '@ionic/vue';
+import { IonPage,  IonContent, IonItem, IonLabel, IonInput, IonButton, IonIcon } from '@ionic/vue';
 import api from '@/services/api';
 import { trashBin } from 'ionicons/icons';
 
@@ -59,11 +59,11 @@ onMounted(async () => {
       collectionStatus.value = response.status;
     } else {
       alert('Collection does not exist or is not in NO_WORDS status.');
-      router.push('/tabs/collections');
+      await router.push('/tabs/collections');
     }
   } catch (error) {
     console.error('Error fetching collection:', error);
-    router.push('/tabs/collections');
+    await router.push('/tabs/collections');
   }
 });
 
@@ -71,7 +71,7 @@ const addWords = async () => {
   const newWords = [{ origin: '', translation: '' }];
   collection.value.words.push(...newWords);
   await nextTick();
-  content.value.scrollToBottom(300);
+  await content.value.scrollToBottom(300);
 };
 
 const deleteWord = (index: number) => {
