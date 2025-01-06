@@ -95,12 +95,6 @@ onMounted(async () => {
   setInterval(updateCountdowns, 1000);
 });
 
-watch(() => route.params.reload, async (newVal) => {
-  if (newVal === 'true') {
-    await fetchCollections();
-  }
-});
-
 const handleClick = async (id: string) => {
   await router.push(`/learn/${id}`);
 };
