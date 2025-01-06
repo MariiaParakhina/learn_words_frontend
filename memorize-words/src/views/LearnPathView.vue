@@ -2,33 +2,35 @@
   <ion-page :key="routeKey">
     <ion-content :fullscreen="true" class="page-content">
       <ion-button class="back-button" @click="goBack">
-        <ion-icon aria-hidden="true" :icon="arrowBack" />
+        <ion-icon aria-hidden="true" :icon="arrowBack"/>
       </ion-button>
       <div class="setBtn">
         <ion-button class="delete-button" @click="deleteCollection">
-          <ion-icon aria-hidden="true" :icon="trashBin" />
+          <ion-icon aria-hidden="true" :icon="trashBin"/>
         </ion-button>
         <ion-button class="delete-button" @click="seeWords">
-          <ion-icon aria-hidden="true" :icon="bookOutline" />
+          <ion-icon aria-hidden="true" :icon="bookOutline"/>
         </ion-button>
       </div>
 
       <div class="content">
         <div class="container">
           <div class="journey">
-            <img src="../../public/path-to-one-hour.svg" class="path-to-one-hour" />
+            <img src="../../public/path-to-one-hour.svg" class="path-to-one-hour"/>
 
-            <ion-button class="start-button" @click="startNewTest('CREATED')" fill="clear" :disabled="!isButtonEnabled('CREATED')" :class="{ 'highlight': isButtonEnabled('CREATED') }">
+            <ion-button class="start-button" @click="startNewTest('CREATED')" fill="clear"
+                        :disabled="!isButtonEnabled('CREATED')" :class="{ 'highlight': isButtonEnabled('CREATED') }">
               <div class="button-content">
-                <img src="../../public/start-button.png" alt="Start" class="start" />
+                <img src="../../public/start-button.png" alt="Start" class="start"/>
                 <label v-if="!loading && collection && isValidToStart('CREATED')">
                   Click to start!
                 </label>
               </div>
             </ion-button>
-            <ion-button class="mountain-button one-hour" @click="startNewTest('ONE_HOUR')" fill="clear" :disabled="!isButtonEnabled('ONE_HOUR')" :class="{ 'highlight': isButtonEnabled('ONE_HOUR') }">
+            <ion-button class="mountain-button one-hour" @click="startNewTest('ONE_HOUR')" fill="clear"
+                        :disabled="!isButtonEnabled('ONE_HOUR')" :class="{ 'highlight': isButtonEnabled('ONE_HOUR') }">
               <div class="button-content">
-                <img src="../../public/achievement.png" alt="Mountain 1" class="mountain" />
+                <img src="../../public/achievement.png" alt="Mountain 1" class="mountain"/>
                 <p v-if="!loading && collection && isValidToStart('ONE_HOUR')">
                   Click to start
                 </p>
@@ -37,10 +39,11 @@
                 </p>
               </div>
             </ion-button>
-            <img src="../../public/path-to-one-day.svg" class="path-to-one-day" />
-            <ion-button class="mountain-button one-day" @click="startNewTest('ONE_DAY')" fill="clear" :disabled="!isButtonEnabled('ONE_DAY')" :class="{ 'highlight': isButtonEnabled('ONE_DAY') }">
+            <img src="../../public/path-to-one-day.svg" class="path-to-one-day"/>
+            <ion-button class="mountain-button one-day" @click="startNewTest('ONE_DAY')" fill="clear"
+                        :disabled="!isButtonEnabled('ONE_DAY')" :class="{ 'highlight': isButtonEnabled('ONE_DAY') }">
               <div class="button-content">
-                <img src="../../public/achievement.png" alt="Mountain 2" class="mountain" />
+                <img src="../../public/achievement.png" alt="Mountain 2" class="mountain"/>
                 <p v-if="!loading && collection && isValidToStart('ONE_DAY')">
                   Click to start
                 </p>
@@ -49,10 +52,11 @@
                 </p>
               </div>
             </ion-button>
-            <img src="../../public/path-to-two-days.svg" class="path-to-two-days" />
-            <ion-button class="mountain-button two-days" @click="startNewTest('TWO_DAYS')" fill="clear" :disabled="!isButtonEnabled('TWO_DAYS')" :class="{ 'highlight': isButtonEnabled('TWO_DAYS') }">
+            <img src="../../public/path-to-two-days.svg" class="path-to-two-days"/>
+            <ion-button class="mountain-button two-days" @click="startNewTest('TWO_DAYS')" fill="clear"
+                        :disabled="!isButtonEnabled('TWO_DAYS')" :class="{ 'highlight': isButtonEnabled('TWO_DAYS') }">
               <div class="button-content">
-                <img src="../../public/achievement.png" alt="Mountain 3" class="mountain" />
+                <img src="../../public/achievement.png" alt="Mountain 3" class="mountain"/>
                 <p v-if="!loading && collection && isValidToStart('TWO_DAYS')">
                   Click to start
                 </p>
@@ -61,10 +65,12 @@
                 </p>
               </div>
             </ion-button>
-            <img src="../../public/path-to-and-from-five-days.svg" class="path-to-and-from-five-days" />
-            <ion-button class="mountain-button five-days" @click="startNewTest('FIVE_DAYS')" fill="clear" :disabled="!isButtonEnabled('FIVE_DAYS')" :class="{ 'highlight': isButtonEnabled('FIVE_DAYS') }">
+            <img src="../../public/path-to-and-from-five-days.svg" class="path-to-and-from-five-days"/>
+            <ion-button class="mountain-button five-days" @click="startNewTest('FIVE_DAYS')" fill="clear"
+                        :disabled="!isButtonEnabled('FIVE_DAYS')"
+                        :class="{ 'highlight': isButtonEnabled('FIVE_DAYS') }">
               <div class="button-content">
-                <img src="../../public/achievement.png" alt="Mountain 4" class="mountain" />
+                <img src="../../public/achievement.png" alt="Mountain 4" class="mountain"/>
                 <p v-if="!loading && collection && isValidToStart('FIVE_DAYS')">
                   Click to start
                 </p>
@@ -73,9 +79,11 @@
                 </p>
               </div>
             </ion-button>
-            <ion-button class="mountain-button month" @click="startNewTest('ONE_MONTH')" fill="clear" :disabled="!isButtonEnabled('ONE_MONTH')" :class="{ 'highlight': isButtonEnabled('ONE_MONTH') }">
+            <ion-button class="mountain-button month" @click="startNewTest('ONE_MONTH')" fill="clear"
+                        :disabled="!isButtonEnabled('ONE_MONTH')"
+                        :class="{ 'highlight': isButtonEnabled('ONE_MONTH') }">
               <div class="button-content">
-                <img src="../../public/achievement.png" alt="Mountain 5" class="mountain" />
+                <img src="../../public/achievement.png" alt="Mountain 5" class="mountain"/>
                 <p v-if="!loading && collection && isValidToStart('ONE_MONTH')">
                   Click to start
                 </p>
@@ -85,10 +93,12 @@
               </div>
             </ion-button>
 
-            <img src="../../public/path-to-finish.svg" class="path-to-finish" />
-            <ion-button class="finish-button" @click="startNewTest('COMPLETED')" fill="clear" :disabled="!isButtonEnabled('COMPLETED')" :class="{ 'highlight': isButtonEnabled('COMPLETED') }">
+            <img src="../../public/path-to-finish.svg" class="path-to-finish"/>
+            <ion-button class="finish-button" @click="startNewTest('COMPLETED')" fill="clear"
+                        :disabled="!isButtonEnabled('COMPLETED')"
+                        :class="{ 'highlight': isButtonEnabled('COMPLETED') }">
               <div class="button-content">
-                <img src="../../public/finish.png" alt="Finish Line" class="finish-line" />
+                <img src="../../public/finish.png" alt="Finish Line" class="finish-line"/>
                 <p v-if="!loading && collection && collection.status === 'COMPLETED'">Click to start</p>
               </div>
             </ion-button>
@@ -100,16 +110,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { IonPage, IonContent, IonButton, IonIcon } from '@ionic/vue';
+import {ref, onMounted, watch, computed} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import {IonPage, IonContent, IonButton, IonIcon} from '@ionic/vue';
 import api from '@/services/api';
-import { VerifyTiming } from '../services/timingService';
+import {VerifyTiming} from '../services/timingService';
 import {arrowBack, bookOutline, trashBin} from "ionicons/icons";
 
 const router = useRouter();
 const route = useRoute();
-const collection = ref<{ id?: string, status?: string, updatedAt?: string, isPracticed: boolean, isPassed:boolean } | null>(null);
+const collection = ref<{
+  id?: string,
+  status?: string,
+  updatedAt?: string,
+  isPracticed: boolean,
+  isPassed: boolean
+} | null>(null);
 const loading = ref(true);
 
 const isValidToStart = (status: string) => {
@@ -153,8 +169,7 @@ const deleteCollection = async () => {
   }
   try {
     await api.deleteCollection(collection.value.id);
-    await router.push({ name: 'CollectionsPage', params: { reload: 'true' } });
-    window.location.reload();
+    await router.push({name: 'CollectionsPage'});
 
   } catch (error) {
     console.error('Error deleting collection:', error);
@@ -219,7 +234,7 @@ const isButtonEnabled = (status: string) => {
 
 const loadData = async () => {
   const id = route.params.id as string;
-  if(id){
+  if (id) {
     await fetchCollection(id);
     updateCountdowns();
     setInterval(updateCountdowns, 1000);
@@ -247,13 +262,15 @@ const goBack = () => {
   left: 10px;
   z-index: 1000;
 }
-.setBtn{
+
+.setBtn {
   position: absolute;
   top: 10px;
   right: 10px;
   width: 30%;
   z-index: 1000;
 }
+
 .delete-button {
   --background: #1B263B;
   --color: white;
@@ -272,10 +289,12 @@ const goBack = () => {
   height: 100vh;
   width: 100%;
 }
+
 p {
   display: block;
   color: white;
 }
+
 .start {
   width: 45px;
   height: 45px;
@@ -308,16 +327,19 @@ label {
   color: white;
   font-size: 12px;
 }
+
 .path-to-one-hour {
   position: absolute;
   top: 5%;
   left: 20%;
 }
+
 .path-to-one-day {
   position: absolute;
   top: 18%;
   right: 3%;
 }
+
 .one-hour {
   position: absolute;
   top: 10%;
@@ -329,11 +351,13 @@ label {
   top: 15%;
   left: 7%;
 }
+
 .path-to-two-days {
   position: absolute;
   left: 3%;
   top: 25%;
 }
+
 .two-days {
   position: absolute;
   top: 42%;
@@ -345,11 +369,13 @@ label {
   top: 38%;
   right: 0;
 }
+
 .path-to-and-from-five-days {
   position: absolute;
   top: 45%;
   right: 7%;
 }
+
 .month {
   position: absolute;
   top: 70%;
@@ -361,6 +387,7 @@ label {
   bottom: 3%;
   left: 30%;
 }
+
 .finish-button {
   position: absolute;
   bottom: 0;
@@ -402,6 +429,7 @@ label {
   stroke-width: 1;
   stroke-dasharray: 5, 5;
 }
+
 label {
   color: white;
   display: block;
