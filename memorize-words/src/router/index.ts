@@ -32,10 +32,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/tabs/',
     component: TabsPage,
     children: [
-      {
-        path: '',
-        redirect: '/tabs/collections'
-      },
+
       {
         path: 'collections',
         name: 'CollectionsPage',
