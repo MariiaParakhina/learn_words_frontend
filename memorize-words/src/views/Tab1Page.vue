@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, watch} from 'vue';
+import {ref, onMounted, watch, watchEffect} from 'vue';
 import {useRouter, useRoute} from 'vue-router';
 import {
   IonPage,
@@ -93,6 +93,10 @@ const fetchCollections = async () => {
 onMounted(async () => {
   await fetchCollections();
   setInterval(updateCountdowns, 1000);
+});
+
+watchEffect(async () => {
+  await fetchCollections();
 });
 
 const handleClick = async (id: string) => {
