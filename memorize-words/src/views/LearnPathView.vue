@@ -110,8 +110,8 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, watch, computed} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
+import {ref, onMounted, computed} from 'vue';
+import {useRoute, useRouter,onBeforeRouteUpdate} from 'vue-router';
 import {IonPage, IonContent, IonButton, IonIcon} from '@ionic/vue';
 import api from '@/services/api';
 import {VerifyTiming} from '../services/timingService';
@@ -242,6 +242,13 @@ const loadData = async () => {
   }
 
 };
+
+onBeforeRouteUpdate((to, from, next) => {
+  loadData();
+  next();
+});
+
+const routeKey = computed(() => route.params.id);
 
 onMounted(loadData);
 
