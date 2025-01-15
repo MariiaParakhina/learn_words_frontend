@@ -72,9 +72,7 @@ onMounted(async () => {
   setInterval(updateCountdowns, 1000);
 });
 
-watchEffect(async () => {
-  await fetchCollections();
-});
+
 
 const handleClick = async (id: string) => {
   await router.push(`/learn/${id}`);
