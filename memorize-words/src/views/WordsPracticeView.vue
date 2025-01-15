@@ -137,7 +137,8 @@ const finishPractice = async () => {
   } catch (error) {
     console.error('Error finishing practice:', error);
   }
-  window.location.href = `/learn/${collection.value?.id}`;
+ // window.location.href = `/learn/${collection.value?.id}`;
+  router.push(`/learn/${collection.value?.id}`);
 };
 </script>
 
