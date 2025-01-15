@@ -150,13 +150,13 @@ const fetchCollection = async (id: string) => {
     collection.value = response.result;
     console.log('Collection fetched:', collection.value);
     if (!collection.value) {
-      await router.push('/tabs/');
+      await router.push('/');
     } else if (collection.value.status === 'NO_WORDS') {
       await router.push(`/add-words/${collection.value.id}`);
     }
   } catch (error) {
     console.error('Error fetching collection:', error);
-    await router.push('/tabs/');
+    await router.push('/');
   } finally {
     loading.value = false;
   }
@@ -169,15 +169,16 @@ const deleteCollection = async () => {
   }
   try {
     await api.deleteCollection(collection.value.id);
-    // await router.push({name: 'CollectionsPage'});
+   // collections.value = collections.value.filter(c => c.id !== collection.value?.id);
     await router.push('/');
   } catch (error) {
     console.error('Error deleting collection:', error);
   }
 };
+
 const seeWords = async () => {
   if (collection.value && collection.value.id) {
-    router.push(`/words/${collection.value.id}`);
+   await  router.push(`/words/${collection.value.id}`);
   } else {
     console.error('Collection data is not available');
   }
@@ -248,8 +249,8 @@ watch(() => route.params.id, loadData);
 
 const routeKey = computed(() => route.params.id);
 
-const goBack = () => {
-  router.push('/');
+const goBack = async () => {
+  await router.push('/');
 };
 </script>
 

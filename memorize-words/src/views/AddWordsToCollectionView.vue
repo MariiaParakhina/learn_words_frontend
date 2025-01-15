@@ -70,7 +70,7 @@ onMounted(async () => {
 const addWords = async () => {
   const newWords = [{ origin: '', translation: '' }];
   collection.value.words.push(...newWords);
- /* await nextTick();*/
+  await nextTick();
 };
 
 const deleteWord = (index: number) => {
@@ -101,7 +101,7 @@ const submitWords = async () => {
 
 <style scoped>
 .page-content {
-  height: calc(100vh - 56px); /* Adjust height to account for header */
+  height: calc(100vh - 56px);
   display: flex;
   flex-direction: column;
   align-items: center;

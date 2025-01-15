@@ -11,7 +11,7 @@
           <ion-title size="large">Collections</ion-title>
         </ion-toolbar>
       </ion-header>
-      <div class="collections-grid">
+      <div class="collections-grid content">
         <ion-card v-for="collection in collections" :key="collection.id" @click="handleClick(collection.id)">
           <ion-card-header class="card-header">
             <ion-card-title>{{ collection.name }}</ion-card-title>
@@ -36,7 +36,7 @@
           </ion-card-content>
         </ion-card>
       </div>
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="add-collection-button">
         <ion-fab-button @click="addCollection">
           <ion-icon aria-hidden="true" :icon="addOutline"/>
         </ion-fab-button>
@@ -53,7 +53,6 @@ import api from '@/services/api';
 import { GetProgressPercentage } from '../services/timingService';
 
 const router = useRouter();
-const route = useRoute();
 const collections = ref([]);
 
 const fetchCollections = async () => {
@@ -120,7 +119,6 @@ const updateCountdowns = () => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 16px;
-  padding: 16px;
   background-color: #1B263B;
 }
 
@@ -164,6 +162,10 @@ ion-card-content p {
 ion-fab-button {
   --background: #1B263B;
   --color: white;
+  --border-radius: 50%;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --width: 56px;
+  --height: 56px;
 }
 
 .circular-progress {
@@ -202,5 +204,9 @@ ion-fab-button {
   margin-top: 8px;
   text-align: center;
   color: white;
+}
+
+.add-collection-button {
+  bottom: 56px;
 }
 </style>
