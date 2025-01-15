@@ -91,8 +91,10 @@ const submitWords = async () => {
   try {
     console.log(toRaw(collection.value.words)); // Log the raw array
     await api.addWords(collection.value.id, { words: collection.value.words });
+    console.log('Words added successfully');
     /*await router.push({ name: 'CollectionsPage' });*/
     await router.push('/');
+    console.log('Redirected to CollectionsPage');
   } catch (error) {
     console.error('Error updating collection:', error);
   }
