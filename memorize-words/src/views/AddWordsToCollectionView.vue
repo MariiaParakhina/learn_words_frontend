@@ -70,8 +70,7 @@ onMounted(async () => {
 const addWords = async () => {
   const newWords = [{ origin: '', translation: '' }];
   collection.value.words.push(...newWords);
-  await nextTick();
-  await content.value.scrollToBottom(300);
+ /* await nextTick();*/
 };
 
 const deleteWord = (index: number) => {
