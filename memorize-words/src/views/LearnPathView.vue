@@ -110,12 +110,12 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, computed} from 'vue';
-import {useRoute, useRouter,onBeforeRouteUpdate} from 'vue-router';
-import {IonPage, IonContent, IonButton, IonIcon} from '@ionic/vue';
+import { ref, onMounted, computed } from 'vue';
+import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
+import { IonPage, IonContent, IonButton, IonIcon } from '@ionic/vue';
 import api from '@/services/api';
-import {VerifyTiming} from '../services/timingService';
-import {arrowBack, bookOutline, trashBin} from "ionicons/icons";
+import { VerifyTiming } from '../services/timingService';
+import { arrowBack, bookOutline, trashBin } from "ionicons/icons";
 
 const router = useRouter();
 const route = useRoute();
@@ -169,7 +169,6 @@ const deleteCollection = async () => {
   }
   try {
     await api.deleteCollection(collection.value.id);
-   // collections.value = collections.value.filter(c => c.id !== collection.value?.id);
     await router.push('/');
   } catch (error) {
     console.error('Error deleting collection:', error);
@@ -178,11 +177,12 @@ const deleteCollection = async () => {
 
 const seeWords = async () => {
   if (collection.value && collection.value.id) {
-   await  router.push(`/words/${collection.value.id}`);
+    await router.push(`/words/${collection.value.id}`);
   } else {
     console.error('Collection data is not available');
   }
 };
+
 const remainingTime = (status: string) => {
   if (!collection.value || !collection.value.updatedAt) return 0;
   const now = new Date();
@@ -240,7 +240,6 @@ const loadData = async () => {
     updateCountdowns();
     setInterval(updateCountdowns, 1000);
   }
-
 };
 
 onBeforeRouteUpdate((to, from, next) => {
@@ -248,11 +247,12 @@ onBeforeRouteUpdate((to, from, next) => {
   next();
 });
 
-const routeKey = computed(() => route.params.id);
+const routeKey = computed(() => {
+  const id = route.params.id;
+  return Array.isArray(id) ? id[0] : id;
+});
 
 onMounted(loadData);
-
-const routeKey = computed(() => route.params.id);
 
 const goBack = async () => {
   await router.push('/');
