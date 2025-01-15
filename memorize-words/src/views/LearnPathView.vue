@@ -245,8 +245,6 @@ const loadData = async () => {
 
 onMounted(loadData);
 
-watch(() => route.params.id, loadData);
-
 const routeKey = computed(() => route.params.id);
 
 const goBack = async () => {
